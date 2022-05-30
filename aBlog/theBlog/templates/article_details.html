@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title_tag }}{% endblock %}
+
+{% block content %} 
+<!-- current user: {{ user.id }}
+post Author: {{ post.author.id }} -->
+<h1>{{ post.title }}</h1><small>{{ post.title_tag }}</small><br>
+<small class="disabled">{{ post.post_date }} {{ post.post_time }}</small>
+
+{% if post.author.profile %}    
+
+
+<small>By: <a href="{% url 'members:show_profile' post.author.profile.id post.author %}">{{ post.author }}</a></small><br> 
+
+{% else %}
+<small>By: {{ post.author }}</small><br> 
+{% endif %}
+    
+{% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+    <small><a href="{% url 'theBlog:edit_post' post.pk %}">Edit</a></small>
+    <small><a href="{% url 'theBlog:delete_post' post.pk %}">Delete</a></small>
+    {% endif %}
+
+
+{% endif %}
+    
+<hr>
+
+    <br>
+{% if post.header_image %}
+<img src="{{ post.header_image.url }}" alt="" style="max-width: 40%"><br><br>
+{% endif %}
+    {{ post.body|safe }}
+
+    <br><br>
+    {% if post_likes == 1 %}
+    <p>{{ post_likes }} Like</p>
+    {% else %}
+    <p>{{ post_likes }} Likes</p>
+    {% endif %}
+    <hr>
+    
+
+    <!-- {{ post.author.profile.bio }} -->
+
+    <form action="{% url 'theBlog:like_post' post.pk %}" method='post'>
+        {% csrf_token %}
+
+        {% if user.is_authenticated %}
+
+        {% if liked_post == True %}
+        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger btn-small">Unlike</button><br>
+        {% else %}
+        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-small">Like</button><br>
+        {% endif %}
+       
+        {% else %}
+    
+        <h4>Login to like a Post.</h4>
+    
+        {% endif %}
+    </form>
+<hr>
+    
+    <!-- { if not post.comments.all }
+    <h6>No comments yet..</h6>
+    <a href="#">Add a comment.</a> -->
+
+    Comments({{ post.comments.all.count }})
+    {% for comment in post.comments.all %}
+    <p><strong>{{ comment.user }} - {{ comment.date }}</strong></p>
+    <p>{{ comment.content }}</p>
+
+    <hr>
+    
+    {% endfor %}
+
+
+    {% if user.is_authenticated %}
+    <div class="form-group">
+        <form method="post" action="{% url 'theBlog:article_detail' post.pk %}">
+        </div>
+        
+            {% csrf_token %}
+            {{ comment_form }}
+        <div>
+            <br>
+             <button class="btn btn-primary btn-block" type="submit">Comment</button>   
+        </form>
+        
+    
+    </div>
+    {% else %}
+    <h6>You can login to comment</h6>
+    {% endif %}
+
+    
+    <!-- { else } -->
+
+    <!-- <h3>Comments</h3>
+    { for comment in post.comments.all }
+    <p><strong>{{ comment.user }} - {{ comment.date_added }}</strong></p>
+    <p>{{ comment.content }}</p>
+    
+    { endfor }
+    { endif } -->
+
+    <!-- <form action="{ url 'theBlog:unlike_post' post.pk }" method='post'>
+        { csrf_token }
+        <button type="submit" name="post_id_u" value="{{ post.id }}" class="btn btn-primary btn-small">Like</button><br><br>
+
+    </form> -->
+
+  
+    
+    <br><br><a href="{% url 'theBlog:home' %}" class="btn btn-secondary">Back</a>
+
+
+{% endblock %}

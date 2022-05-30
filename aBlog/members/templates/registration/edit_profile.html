@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Edit Settings{% endblock %}
+{% block content %}
+
+<!-- <style>
+    .helptext {
+        visibility: collapse;
+
+    }
+</style> -->
+
+<h1>Edit Settings..</h1>
+
+
+<br><br>
+
+<div class="form-group">
+    <form action="" method="post">
+        <br><br>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a href="../password">change password</a><br><br>
+        <button class="btn btn-secondary">Update Profile</button>
+    </form>
+</div>  
+
+
+{% endblock %}
+    

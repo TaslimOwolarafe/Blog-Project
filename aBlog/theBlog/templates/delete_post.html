@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Delete Post{% endblock %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    {% if user.id == post.author.id %}
+<h1>Delete Post</h1>
+<div class="form-group">
+        <br><br>
+        <form method="post">
+            {% csrf_token %}
+
+        <strong>Are you sure you want to delete "{{ post.title }}"?</strong><br><br>
+        <input type="submit" class="btn btn-danger" value="Delete Post">
+        <!-- <button class="btn btn-danger">Delete Post</button> -->
+        <a href="{% url 'theBlog:article_detail' pk=post.pk %}" class="btn btn-primary">Cancel</a>
+
+        </form>
+        
+</div>
+    {% else %}
+    <h1>You have to be logged in to use this feature.</h1>
+    {% endif %}
+{% else %}
+<h1>You have to be logged in to use this feature.</h1> 
+{% endif %}
+
+
+
+{% endblock %}
+    

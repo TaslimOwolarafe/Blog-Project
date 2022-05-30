@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ cat_dict }}{% endblock %}
+{% block content %}
+
+{% if cat_posts %}
+
+<h1>{{ cat_dict|title }} Category</h1>
+    <!-- <h1>{{ cat_dict }}</h1> -->
+
+    {% for post in cat_posts %}
+    <ul>
+        <li><a href="{% url 'theBlog:article_detail' post.pk %}">{{ post.title }}</a>
+            <br><small> by {{ post.author }} {{ post.author.email }} </small>
+            
+            {% if user.is_authenticated %}
+            <small><a href="{% url 'theBlog:edit_post' post.pk %}">Edit</a></small>
+            <small><a href="{% url 'theBlog:delete_post' post.pk %}">Delete</a></small>
+            {% endif %}
+        </li>
+        
+        {{ post.body|slice:":200" }}
+        <br><small><small class="disabled">{{ post.post_time }} {{ post.post_date }}</small></small>
+    </ul>
+    
+    {% endfor %}
+    
+    {% else %}
+
+    <h1>Sorry this page doesn't exist...</h1>
+
+    {% endif %}
+    <br><br>
+    <a href="{% url 'theBlog:home' %}" class="btn btn-secondary">Back</a>
+
+{% endblock %}
+    
+    
