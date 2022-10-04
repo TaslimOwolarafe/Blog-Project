@@ -9,8 +9,6 @@ jobs:
     steps:
     - name: Checkout VM
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
 
     - name: Set up python
       uses: actions/setup-python@v2
@@ -18,5 +16,4 @@ jobs:
         python-version: 3.8
     - name: Run Django unit tests
       run:
-        pip install --user django
-        python manage.py test
+        pip install --user django && python manage.py test
