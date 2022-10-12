@@ -16,4 +16,4 @@ jobs:
         python-version: 3.8
     - name: Run Django unit tests
       run:
-        pip install -r requirements.txt && python aBlog/manage.py test
+        pip install -r requirements.txt && python manage.py test
